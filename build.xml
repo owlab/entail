@@ -6,6 +6,7 @@
 <property name="build.home"    value="${basedir}/build"/>
 <property name="dist.home"     value="${basedir}/dist"/>
 <property name="src.home"      value="${basedir}/src"/>
+<property name="jarinjarloader.src.home"      value="${basedir}/jarinjarloader"/>
 <!-- following libraries are note included in distribution package -->
 <property name="lib.home"     value="${basedir}/lib"/>
 
@@ -49,11 +50,33 @@
 	<javac srcdir="${src.home}" destdir="${build.home}" debug="true" debuglevel="lines, vars, source">
 		<classpath refid="compile.classpath"/>
 	</javac>
+	<javac srcdir="${jarinjarloader.src.home}" destdir="${build.home}" debug="true" debuglevel="lines, vars, source">
+			<classpath refid="compile.classpath"/>
+	</javac>
 </target>
 
 <target name="dist" depends="compile" description="Create Jar file for binary distribution">
-	<jar destfile="${dist.home}/${server.jar.name}.jar" basedir="${build.home}" excludes="**/client/**"/>
-	<jar destfile="${dist.home}/${client.jar.name}.jar" basedir="${build.home}" excludes="**/server/**"/>
+	<jar destfile="${dist.home}/${server.jar.name}.jar">
+		<fileset dir="${build.home}" excludes="**/client/**"/>
+		<fileset dir="${lib.home}" excludes="swt.jar"/>
+		<manifest>
+		      <attribute name="Rsrc-Class-Path" value="./ protobuf-java-2.4.1.jar"/>
+		      <attribute name="Class-Path" value="."/> 
+		      <attribute name="Rsrc-Main-Class" value="com.enxime.entail.server.TailServer"/>             
+		      <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+		</manifest>
+	</jar>
+	<jar destfile="${dist.home}/${client.jar.name}.jar">
+		<fileset dir="${build.home}" excludes="**/server/**"/>
+		<fileset dir="${lib.home}"/>
+		<manifest>
+				      <attribute name="Rsrc-Class-Path" value="./ protobuf-java-2.4.1.jar swt.jar"/>
+				      <attribute name="Class-Path" value="."/> 
+				      <attribute name="Rsrc-Main-Class" value="com.enxime.entail.client.TailClient"/>             
+				      <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+				</manifest>
+	</jar>
+		
 </target>
 
 <macrodef name = "git">
