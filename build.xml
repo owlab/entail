@@ -57,7 +57,7 @@
 </target>
 
 <target name="dist" depends="compile" description="Create Jar file for binary distribution">
-	<jar destfile="${dist.home}/${server.jar.name}.jar">
+	<jar destfile="${dist.home}/${server.jar.name}">
 		<fileset dir="${build.home}" excludes="**/client/**"/>
 		<fileset dir="${lib.home}" excludes="swt.jar"/>
 		<manifest>
@@ -67,7 +67,7 @@
 		      <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
 		</manifest>
 	</jar>
-	<jar destfile="${dist.home}/${client.jar.name}.jar">
+	<jar destfile="${dist.home}/${client.jar.name}">
 		<fileset dir="${build.home}" excludes="**/server/**"/>
 		<fileset dir="${lib.home}"/>
 		<manifest>
