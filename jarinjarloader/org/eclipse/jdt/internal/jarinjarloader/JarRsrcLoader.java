@@ -51,7 +51,11 @@ public class JarRsrcLoader {
         }
         ClassLoader jceClassLoader = new URLClassLoader(rsrcUrls, null);
         Thread.currentThread().setContextClassLoader(jceClassLoader);
-        Class c = Class.forName(mi.rsrcMainClass, true, jceClassLoader);
+        /*
+         * to avoid unchecked warning
+         * Class c = Class.forName(mi.rsrcMainClass, true, jceClassLoader);
+         */
+        Class<?> c = Class.forName(mi.rsrcMainClass, true, jceClassLoader);
         Method main = c.getMethod("main", new Class[]{args.getClass()}); //$NON-NLS-1$
         main.invoke((Object)null, new Object[]{args});
     }
@@ -94,7 +98,11 @@ public class JarRsrcLoader {
     private static String[] splitSpaces(String line) {
         if (line == null) 
             return null;
-        List result = new ArrayList();
+        /*
+         * To avoid unchecked warning
+         * List result = new ArrayList();
+         */
+        List<String> result = new ArrayList<String>();
         int firstPos = 0;
         while (firstPos < line.length()) {
             int lastPos = line.indexOf(' ', firstPos);
