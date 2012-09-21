@@ -73,7 +73,7 @@
 		<manifest>
 				      <attribute name="Rsrc-Class-Path" value="./ protobuf-java-2.4.1.jar swt.jar"/>
 				      <attribute name="Class-Path" value="."/> 
-				      <attribute name="Rsrc-Main-Class" value="com.enxime.entail.client.TailClient"/>             
+				      <attribute name="Rsrc-Main-Class" value="com.enxime.entail.client.ui.EntailClientMain"/>             
 				      <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
 				</manifest>
 	</jar>
