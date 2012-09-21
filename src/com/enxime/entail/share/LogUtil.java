@@ -14,6 +14,10 @@ import java.util.logging.SimpleFormatter;
 public class LogUtil {
 	private static Level level = Level.FINE;
 	
+	public static Logger getLogger(Class klass) {
+		return getLogger(klass.getName(), level); 
+	}
+	
 	public static Logger getLogger(String name) {
 		return getLogger(name, level); 
 	}

@@ -85,7 +85,7 @@ public class TailClientDataHandler implements Runnable {
 						break;
 					}
 				}
-				if(queue.size() >0) {
+				if(queue.size() > 0) {
 				    //_logger.fine("queue size=" + queue.size());
 					clientDataEvent = queue.remove(0);
 				}
