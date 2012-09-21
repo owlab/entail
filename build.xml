@@ -1,0 +1,72 @@
+<project name="Fresto" default="all" basedir=".">
+<!-- Define the properties used by the build -->
+<property name="version"	value="0.8"/>
+<property name="server.jar.name"      value="entail-server-${version}.jar"/>
+<property name="client.jar.name"      value="entail-client-${version}.jar"/>
+<property name="build.home"    value="${basedir}/build"/>
+<property name="dist.home"     value="${basedir}/dist"/>
+<property name="src.home"      value="${basedir}/src"/>
+<!-- following libraries are note included in distribution package -->
+<property name="lib.home"     value="${basedir}/lib"/>
+
+<target name="help">
+	<echo>You can use the following targets:</echo>
+	<echo> </echo>
+	<echo>  help    : (default) Prints this message </echo>
+	<echo>  all     : Cleans, compiles, packages, and deployes application</echo>
+	<echo>  clean   : Deletes work directories</echo>
+	<echo>  compile : Compiles servlets into class files</echo>
+	<echo>  dist    : Packages artifacts into a deployable Jar</echo>
+	<echo></echo>
+	<echo>For example, to clean, compile, and package all at once, run:</echo>
+	<echo>prompt> ant dist </echo>
+</target>
+
+<!-- Define the CLASSPATH -->
+<path id="compile.classpath">
+	<fileset dir="${lib.home}">
+		<include name="*.jar"/>
+	</fileset>
+</path>
+
+<target name="all" depends="clean,prepare,git-pull,compile,dist" description="Clean work dirs, then compile, and packaging"/>
+
+<target name="clean" description="Delete old build and dist directories">
+	<delete dir="${build.home}"/>
+	<delete dir="${dist.home}"/>
+</target>
+
+<target name="prepare" depends="clean" description="Create working dirs and copy static files to work dir">
+	<mkdir  dir="${dist.home}"/>
+	<mkdir  dir="${build.home}"/>
+</target>
+
+<target name="git-pull">
+	<git command="pull" dir="${basedir}"/>
+</target>
+
+<target name="compile" depends="prepare,git-pull" description="Compile Java sources">
+	<javac srcdir="${src.home}" destdir="${build.home}" debug="true" debuglevel="lines, vars, source">
+		<classpath refid="compile.classpath"/>
+	</javac>
+</target>
+
+<target name="dist" depends="compile" description="Create Jar file for binary distribution">
+	<jar destfile="${dist.home}/${server.jar.name}.jar" basedir="${build.home}" excludes="**/client/**"/>
+	<jar destfile="${dist.home}/${client.jar.name}.jar" basedir="${build.home}" excludes="**/server/**"/>
+</target>
+
+<macrodef name = "git">
+	<attribute name = "command" /> 
+	<attribute name = "dir" default = "" /> 
+	<element name = "args" optional = "true" /> 
+	<sequential> 
+		<echo message = "git @{command}" /> 
+		<exec executable = "git" dir = "@{dir}"> 
+			<arg value = "@{command}" /> 
+			<args/> 
+		</exec> 
+	</sequential> 
+</macrodef>
+
+</project> 
