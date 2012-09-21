@@ -47,11 +47,12 @@
 </target>
 
 <target name="compile" depends="prepare,git-pull" description="Compile Java sources">
-	<javac srcdir="${src.home}" destdir="${build.home}" debug="true" debuglevel="lines, vars, source">
+	<javac srcdir="${src.home}" destdir="${build.home}" debug="true" debuglevel="lines, vars, source" includeantruntime="false">
 		<classpath refid="compile.classpath"/>
 	</javac>
-	<javac srcdir="${jarinjarloader.src.home}" destdir="${build.home}" debug="true" debuglevel="lines, vars, source">
-			<classpath refid="compile.classpath"/>
+	<javac srcdir="${jarinjarloader.src.home}" destdir="${build.home}" debug="true" debuglevel="lines, vars, source" includeantruntime="false">
+		<classpath refid="compile.classpath"/>
+		<compilerarg value="-Xlint:unchecked"/>
 	</javac>
 </target>
 
