@@ -52,6 +52,7 @@ public class TailListenerAdapter implements TailListener {
 		this.client.send(makeBytesToClient(toClient));
 	}
 
+	
 	@Override
 	public void handleLine(String line) {
 		_logger.fine("called");
@@ -69,15 +70,21 @@ public class TailListenerAdapter implements TailListener {
 	public void handleLines(String[] lines) {
 		_logger.fine("called");
 		//_logger.finer("line: " + line);
+		handleLines(lines, 0, lines.length);
+	}
+	
+	@Override
+	public void handleLines(String[] lines, int startIndex, int length) {
+		_logger.fine("called");
+		//_logger.finer("line: " + line);
 		Builder builder = ToClient.newBuilder()
 				.setFilePath(this.tailer.getFilePath())
 				.setResultCode(ResultCode.OK);
-		
-		for(String line: lines)
-				builder.addTailLine(line);
+		for(int i = startIndex; i < length; i++) {
+			builder.addTailLine(lines[i]);
+		}
 		
 		ToClient toClient = builder.build();
-		
 		this.client.send(makeBytesToClient(toClient));
 	}
 

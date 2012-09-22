@@ -89,6 +89,7 @@ public class CTabItemWrapper {
 	public void appendTextFromOtherThread(List<String> textList) {
 		this.cTabFolder.getDisplay().asyncExec(
 				new AppendTextThread(/* this, */textList));
+//		this.cTabFolder.getDisplay().syncExec(new AppendTextThread(textList));
 	}
 
 	public void setMessage(String message) {

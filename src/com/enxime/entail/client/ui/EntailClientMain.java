@@ -144,12 +144,6 @@ public class EntailClientMain {
 
 	}
 
-	// private boolean urlTextVerified() {
-	// boolean result = true;
-	// // TODO validate the url format
-	// return result;
-	// }
-
 	public void showAlert(String message) {
 		Display.getDefault().asyncExec(new AlertThread(message));
 	}
@@ -187,7 +181,7 @@ public class EntailClientMain {
 			_logger.fine(event.text);
 			try {
 				TailURL tailUrl = new TailURL(urlText.getText());
-				if (CTabItemWrapperManager.getInstance().isContained(tailUrl)) {
+				if (CTabItemWrapperManager.getInstance().hasAlready(tailUrl)) {
 					showAlert(tailUrl.toString() + " is already tailed.");
 				}
 				boolean success = CTabItemWrapperManager.getInstance()

@@ -42,7 +42,7 @@ public class CTabItemWrapperManager {
 		}
 	}
 
-	public boolean isContained(TailURL tailUrl) {
+	public boolean hasAlready(TailURL tailUrl) {
 		return cTabItemWrapperMap.containsKey(tailUrl);
 	}
 
@@ -53,6 +53,9 @@ public class CTabItemWrapperManager {
 	public void appendLinesToCTabItemBodyFromOtherThread(TailURL tailUrl,
 			List<String> textList) {
 		CTabItemWrapper cTabItemWrapper = cTabItemWrapperMap.get(tailUrl);
+		
+		_logger.fine("Size of textList=" + textList.size());
+		
 		if (cTabItemWrapper != null)
 			cTabItemWrapper.appendTextFromOtherThread(textList);
 	}

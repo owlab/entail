@@ -22,7 +22,11 @@ public class TailWorker implements Runnable {
 	private final TailListener listener;
 	private volatile boolean run = true;
 	private volatile boolean suspended = false;
-
+	// to send multiple lines
+	private final int lineBufferLength = 10;
+	private int lineBufferCount = 0;
+	private final String[] lineBuffer = new String[lineBufferLength];
+	
 	public TailWorker(String file, TailListener listener) {
 		this(file, listener, 1000);
 	}
@@ -189,11 +193,20 @@ public class TailWorker implements Runnable {
 	}
 	
 	private long readLines(RandomAccessFile reader) throws IOException {
-		String line = reader.readLine();
-		while(line != null) {
-			listener.handleLine(line);
-			line = reader.readLine();
+		String line = null;
+		while((line = reader.readLine()) != null) {
+			lineBuffer[lineBufferCount++] = line;
+			if(lineBufferCount == lineBufferLength) {
+				listener.handleLines(lineBuffer);
+				lineBufferCount = 0;
+			}
 		}
+		
+		if(lineBufferCount != 0) {
+			listener.handleLines(lineBuffer, 0, lineBufferCount);
+			lineBufferCount = 0;
+		}
+		
 		return reader.getFilePointer();
 	}
 
