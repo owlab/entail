@@ -42,7 +42,7 @@ public class ServerDataHandler implements Runnable {
 	public void run() {
 		_logger.fine("called.");
 		// to know performance
-		CountUtil.start("ServerDataHandler");
+		//CountUtil.start("ServerDataHandler");
 
 		ServerDataEvent dataEvent = null;
 
@@ -65,7 +65,7 @@ public class ServerDataHandler implements Runnable {
 			// dataEvent.server.send(dataEvent.socket, dataEvent.data);
 			// TODO change to send tail lines
 			// this.server.send(dataEvent.socket, dataEvent.data);
-			CountUtil.incrementUntil(1000);
+			//CountUtil.incrementUntil(1000);
 		}
 	}
 

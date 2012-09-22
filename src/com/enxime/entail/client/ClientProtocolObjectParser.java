@@ -42,9 +42,9 @@ public class ClientProtocolObjectParser implements ClientProtocolParser {
 	    for (int i = 0; i < this.remaining; i++)
 		this.objectBuffer.put(byteBuffer.get());
 	    // to something from this code block
-	    ToClient objectFromServer = null;
+	    ToClient fromServer = null;
 	    try {
-		objectFromServer = ToClient
+		fromServer = ToClient
 			.parseFrom(this.objectBuffer.array());
 	    } catch (InvalidProtocolBufferException ipbe) {
 		ipbe.getStackTrace();
@@ -53,8 +53,8 @@ public class ClientProtocolObjectParser implements ClientProtocolParser {
 	    // following object and method might be better to be independent
 	    // thread
 	    // ResponseHandler.handleResponse(objectFromServer);
-	    this.protocolListener.handleServerResponse(objectFromServer);
-
+	    this.protocolListener.handleServerResponse(fromServer);
+	    
 	    context.changeParser().reset(4);
 	    context.handleData(byteBuffer);
 	}

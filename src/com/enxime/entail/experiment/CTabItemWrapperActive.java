@@ -1,13 +1,10 @@
-package com.enxime.entail.client.ui;
+package com.enxime.entail.experiment;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabFolder2Adapter;
-import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -16,11 +13,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.enxime.entail.client.ui.CTabItemWrapperManager;
+import com.enxime.entail.client.ui.TailClientControllerManager;
+import com.enxime.entail.client.ui.TailState;
+import com.enxime.entail.client.ui.TailURL;
 import com.enxime.entail.share.LogUtil;
 
-public class CTabItemWrapper {
+public class CTabItemWrapperActive {
 	private static final Logger _logger = LogUtil
-			.getLogger(CTabItemWrapper.class.getName());
+			.getLogger(CTabItemWrapperActive.class.getName());
 
 	private TailURL tailUrl;
 
@@ -34,7 +35,7 @@ public class CTabItemWrapper {
 	private Text tabItemMessage;
 	private Composite composite;
 
-	public CTabItemWrapper(CTabFolder cTabFolder, TailURL tailUrl) {
+	public CTabItemWrapperActive(CTabFolder cTabFolder, TailURL tailUrl) {
 		_logger.fine("called.");
 		this.tailUrl = tailUrl;
 		this.cTabFolder = cTabFolder;
@@ -95,11 +96,11 @@ public class CTabItemWrapper {
 		this.tabItemMessage.setText(message);
 	}
 
-	public void setMessageFromOtherThread(String message) {
-		// this.tabItemMessage.setText(message);
-		this.cTabFolder.getDisplay().asyncExec(
-				new SetMessageThread(/* this, */message));
-	}
+//	public void setMessageFromOtherThread(String message) {
+//		// this.tabItemMessage.setText(message);
+//		this.cTabFolder.getDisplay().asyncExec(
+//				new SetMessageThread(/* this, */message));
+//	}
 
 	public void setSelection() {
 		this.cTabFolder.setSelection(this.cTabItem);
@@ -135,21 +136,21 @@ public class CTabItemWrapper {
 		}
 	}
 
-	class SetMessageThread extends Thread {
-		// CTabItemWrapper tailClientController;
-		String message;
-
-		SetMessageThread(
-				/* CTabItemWrapper tailClientController, */String message) {
-			// this.tailClientController = tailClientController;
-			this.message = message;
-		}
-
-		public void run() {
-			if (this.message != null)
-				tabItemMessage.setText(this.message);
-		}
-	}
+//	class SetMessageThread extends Thread {
+//		// CTabItemWrapper tailClientController;
+//		String message;
+//
+//		SetMessageThread(
+//				/* CTabItemWrapper tailClientController, */String message) {
+//			// this.tailClientController = tailClientController;
+//			this.message = message;
+//		}
+//
+//		public void run() {
+//			if (this.message != null)
+//				tabItemMessage.setText(this.message);
+//		}
+//	}
 
 	class CTabItemDisposeListener implements DisposeListener {
 
