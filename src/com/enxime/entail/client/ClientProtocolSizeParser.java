@@ -25,7 +25,7 @@ public class ClientProtocolSizeParser implements ClientProtocolParser {
 	 * @see com.enxime.entail.experiment.State#handleData(com.enxime.entail.experiment.StateContext, java.nio.ByteBuffer)
 	 */
 	@Override
-	public void handleData(ClientProtocolParserContext context, ByteBuffer byteBuffer) 
+	public void handleData(ClientProtocolParserContext context, ByteBuffer byteBuffer) throws InvalidDataException 
 	{
 		// If assuming the byteBuffer was used for writing
 		
@@ -45,7 +45,11 @@ public class ClientProtocolSizeParser implements ClientProtocolParser {
 			
 			this.headerBuffer.flip();
 			int objectSize = this.headerBuffer.getInt();
-			
+			if(objectSize >= 1213486160) {
+				// probably invalid size
+				// must stop communication
+				throw new InvalidDataException("Reported object size is abnormal: " + objectSize);
+			}
 			// Change state to ObjectRead
 			context.changeParser().reset(objectSize);
 			context.handleData(byteBuffer);

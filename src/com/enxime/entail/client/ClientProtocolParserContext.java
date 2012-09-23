@@ -40,8 +40,9 @@ public class ClientProtocolParserContext {
 	
 	/**
 	 * @param dataBuffer 
+	 * @throws InvalidDataException 
 	 */
-	public void handleData(ByteBuffer dataBuffer) {
+	public void handleData(ByteBuffer dataBuffer) throws InvalidDataException {
 	    if(this.count == 0) {
 		this.startTime = System.currentTimeMillis();
 	    }

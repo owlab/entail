@@ -93,8 +93,16 @@ public class TailClientDataHandler implements Runnable {
 		   /* Java 1.5 and above
 		    * clientDataEvent = this.queue.poll();
 		    */
-		   if(clientDataEvent != null)
-				readStateContext.handleData(ByteBuffer.wrap(clientDataEvent.data));
+		   if(clientDataEvent != null) {
+				try {
+					readStateContext.handleData(ByteBuffer.wrap(clientDataEvent.data));
+				} catch (InvalidDataException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+					_logger.severe(e.getMessage());
+					break;
+				}
+		   }
 		   if(isInterrupted)
 				break;
 		}

@@ -8,55 +8,55 @@ import com.enxime.entail.share.LogUtil;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class ClientProtocolObjectParser implements ClientProtocolParser {
-    private static final Logger _logger = LogUtil.getLogger(ClientProtocolObjectParser.class.getName());
-    
-    // private static ClientProtocolObjectParser THIS = new
-    // ClientProtocolObjectParser();
-    // private Builder protoObjectBuilder = ToServer.newBuilder();
-    // private int objectSize;
+	private static final Logger _logger = LogUtil
+			.getLogger(ClientProtocolObjectParser.class.getName());
 
-    private ByteBuffer objectBuffer;
-    private int remaining = 0;
-    // private boolean isInitialized = false;
+	// private static ClientProtocolObjectParser THIS = new
+	// ClientProtocolObjectParser();
+	// private Builder protoObjectBuilder = ToServer.newBuilder();
+	// private int objectSize;
 
-    ClientProtocolListener protocolListener;
+	private ByteBuffer objectBuffer;
+	private int remaining = 0;
+	// private boolean isInitialized = false;
 
-    public ClientProtocolObjectParser(ClientProtocolListener protocolListener) {
-	this.protocolListener = protocolListener;
+	ClientProtocolListener protocolListener;
 
-    }
+	public ClientProtocolObjectParser(ClientProtocolListener protocolListener) {
+		this.protocolListener = protocolListener;
 
-    public void reset(int objectSize) {
-	_logger.finer("object size = " + objectSize);
-	this.objectBuffer = ByteBuffer.allocate(objectSize);
-	this.remaining = objectSize;
-    }
-
-    @Override
-    public void handleData(ClientProtocolParserContext context,
-	    ByteBuffer byteBuffer) {
-	if (this.objectBuffer.remaining() > byteBuffer.remaining()) {
-	    this.objectBuffer.put(byteBuffer);
-	    this.remaining = this.objectBuffer.remaining();
-	} else {
-	    for (int i = 0; i < this.remaining; i++)
-		this.objectBuffer.put(byteBuffer.get());
-	    // to something from this code block
-	    ToClient fromServer = null;
-	    try {
-		fromServer = ToClient
-			.parseFrom(this.objectBuffer.array());
-	    } catch (InvalidProtocolBufferException ipbe) {
-		ipbe.getStackTrace();
-	    }
-
-	    // following object and method might be better to be independent
-	    // thread
-	    // ResponseHandler.handleResponse(objectFromServer);
-	    this.protocolListener.handleServerResponse(fromServer);
-	    
-	    context.changeParser().reset(4);
-	    context.handleData(byteBuffer);
 	}
-    }
+
+	public void reset(int objectSize) {
+		_logger.finer("object size = " + objectSize);
+		this.objectBuffer = ByteBuffer.allocate(objectSize);
+		this.remaining = objectSize;
+	}
+
+	@Override
+	public void handleData(ClientProtocolParserContext context,
+			ByteBuffer byteBuffer) throws InvalidDataException {
+		if (this.objectBuffer.remaining() > byteBuffer.remaining()) {
+			this.objectBuffer.put(byteBuffer);
+			this.remaining = this.objectBuffer.remaining();
+		} else {
+			for (int i = 0; i < this.remaining; i++)
+				this.objectBuffer.put(byteBuffer.get());
+			// to something from this code block
+			ToClient fromServer = null;
+			try {
+				fromServer = ToClient.parseFrom(this.objectBuffer.array());
+			} catch (InvalidProtocolBufferException ipbe) {
+				ipbe.getStackTrace();
+			}
+
+			// following object and method might be better to be independent
+			// thread
+			// ResponseHandler.handleResponse(objectFromServer);
+			this.protocolListener.handleServerResponse(fromServer);
+
+			context.changeParser().reset(4);
+			context.handleData(byteBuffer);
+		}
+	}
 }

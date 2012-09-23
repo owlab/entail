@@ -1,19 +1,19 @@
 package com.enxime.entail.client.ui;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabFolder2Adapter;
-import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.enxime.entail.share.LogUtil;
@@ -30,7 +30,7 @@ public class CTabItemWrapper {
 
 	private CTabItem cTabItem;
 	private CTabItemDisposeListener cTabItemDisposeListener;
-	private Text tabItemBody;
+	private StyledText tabItemBody;
 	private Text tabItemMessage;
 	private Composite composite;
 
@@ -48,8 +48,13 @@ public class CTabItemWrapper {
 		GridLayout gridLayout4Composite = new GridLayout();
 		gridLayout4Composite.numColumns = 1;
 		this.composite.setLayout(gridLayout4Composite);
-		this.tabItemBody = new Text(this.composite, SWT.MULTI | SWT.V_SCROLL
+		this.tabItemBody = new StyledText(this.composite, SWT.MULTI | SWT.V_SCROLL
 				| SWT.H_SCROLL | SWT.READ_ONLY | SWT.BORDER);
+		this.tabItemBody.addListener(SWT.Modify, new Listener(){
+		    public void handleEvent(Event e){
+		        tabItemBody.setTopIndex(tabItemBody.getLineCount() - 1);
+		    }
+		});
 		GridData gridData4TabItemBody = new GridData(SWT.FILL, SWT.FILL, true,
 				true);
 		this.tabItemBody.setLayoutData(gridData4TabItemBody);

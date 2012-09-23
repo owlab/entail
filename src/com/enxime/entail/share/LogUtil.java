@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class LogUtil {
-	private static Level level = Level.FINE;
+	private static Level level = Level.INFO;
 	
 	public static Logger getLogger(Class klass) {
 		return getLogger(klass.getName(), level); 

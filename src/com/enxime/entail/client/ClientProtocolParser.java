@@ -9,5 +9,5 @@ public interface ClientProtocolParser {
 	 * @return
 	 */
 	void reset(int size);
-	void handleData(ClientProtocolParserContext context, ByteBuffer byteBuffer);
+	void handleData(ClientProtocolParserContext context, ByteBuffer byteBuffer) throws InvalidDataException;
 }
